@@ -6,7 +6,6 @@ let currentCount = 0;
 async function getGifSearch(evt) {
   evt.preventDefault();
 
-
   const searchTerm = document.querySelector("#search-term").value;
 
   const searchParams = new URLSearchParams({
@@ -15,24 +14,30 @@ async function getGifSearch(evt) {
   const resp = await fetch(`http://api.giphy.com/v1/gifs/search?${searchParams}`);
 
   const data = await resp.json();
-
-
   const gif = data.data[currentCount++].images.original.url;
 
-  console.log({ data });
-
+  // console.log({ data });
   showGif(gif);
 }
 
 
 document.querySelector('#search-giphy').addEventListener('click', getGifSearch);
+document.querySelector('#delete-gifs').addEventListener('click', deleteGifs);
 
 /**Creates HTML template and inserts the gif into the DOM
  */
-
 function showGif(res) {
   const $gifArea =
     document.querySelector("#gif-area");
   const gifDiv = `<div class="gif-div" style="background-image: url('${res}' );"></div>`;
   $gifArea.insertAdjacentHTML("beforeend", gifDiv);
+}
+
+/**
+ *  Takes click on remove image button and deletes all gifs on page
+ */
+function deleteGifs(evt) {
+  evt.preventDefault();
+  const $gifArea = document.querySelector("#gif-area");
+  $gifArea.innerHTML = '';
 }
